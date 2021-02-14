@@ -5,6 +5,7 @@ import {
   WebClientOptions,
   ChatPostMessageArguments,
   ChatPostEphemeralArguments,
+  WebAPICallResult
 } from "@slack/web-api";
 import React, { useState as reactUseState } from "react";
 
@@ -13,7 +14,7 @@ import {
   generateEvent,
   loadMessagesFromArray,
   loadMessagesFromDirectory,
-  parseMessageKey,
+  parseMessageKey
 } from "./utils";
 import { SelectMenu } from "./components";
 import {
@@ -25,7 +26,7 @@ import {
   PheliaStorage,
   SubmitEvent,
   PheliaHome,
-  SlackUser,
+  SlackUser
 } from "./interfaces";
 
 /** The main phelia client. Handles sending messages with phelia components */
@@ -42,8 +43,8 @@ export class Phelia {
     Phelia.Storage = storage;
   }
 
-  constructor(token: string, slackOptions?: WebClientOptions) {
-    this.client = new WebClient(token, slackOptions);
+  constructor(client: WebClient) {
+    this.client = client;
   }
 
   async openModal<p>(
@@ -70,8 +71,8 @@ export class Phelia {
       trigger_id: triggerID,
       view: {
         ...message,
-        notify_on_close: true,
-      },
+        notify_on_close: true
+      }
     });
 
     const viewID = response.view.id;
@@ -85,17 +86,17 @@ export class Phelia {
         state: initializedState,
         type: "modal",
         modalType: "root",
-        viewID,
+        viewID
       })
     );
   }
 
-  async postMessage<p>(
+  async render_message<p>(
     message: PheliaMessage<p>,
     channel: string,
     props: p = null,
     slackOptions?: ChatPostMessageArguments
-  ): Promise<string> {
+  ): Promise<[any, (sent_message_data: WebAPICallResult) => any]> {
     const initializedState: { [key: string]: any } = {};
 
     /** A hook to create some state for a component */
@@ -112,39 +113,37 @@ export class Phelia {
       return async () => null;
     }
 
-    const messageData = await render(
+    const rendered_message = await render(
       React.createElement(message, { useState, props, useModal })
     );
 
-    const {
-      channel: channelID,
-      ts,
-      message: sentMessageData,
-    } = await this.client.chat.postMessage({
-      ...messageData,
-      ...slackOptions,
-      channel,
-    });
+    return [
+      rendered_message,
+      async (sent_message_data: WebAPICallResult): Promise<string> => {
+        const channelID = (sent_message_data as any).channel;
+        const timestamp = (sent_message_data as any).ts;
+        const user = await this.enrichUser(
+          ((sent_message_data as any).message as any).user
+        );
 
-    const user = await this.enrichUser((sentMessageData as any).user);
+        const messageKey = `${channelID}:${timestamp}`;
 
-    const messageKey = `${channelID}:${ts}`;
-
-    await Phelia.Storage.set(
-      messageKey,
-      JSON.stringify({
-        message: JSON.stringify(messageData),
-        type: "message",
-        name: message.name,
-        state: initializedState,
-        user,
-        props,
-        channelID,
-        ts,
-      })
-    );
-
-    return messageKey;
+        await Phelia.Storage.set(
+          messageKey,
+          JSON.stringify({
+            message: JSON.stringify(rendered_message),
+            type: "message",
+            name: message.name,
+            state: initializedState,
+            user,
+            props,
+            channelID,
+            ts: timestamp
+          })
+        );
+        return messageKey;
+      }
+    ];
   }
 
   async postEphemeral<p>(
@@ -178,7 +177,7 @@ export class Phelia {
       ...messageData,
       userId,
       channel,
-      ...slackOptions,
+      ...slackOptions
     });
 
     const user = await this.enrichUser(userId);
@@ -196,7 +195,7 @@ export class Phelia {
         user,
         props,
         channelID,
-        ts,
+        ts
       })
     );
 
@@ -219,7 +218,7 @@ export class Phelia {
     function useState<t>(key: string): [t, (value: t) => void] {
       return [
         container.state[key],
-        (newState: t) => (container.state[key] = newState),
+        (newState: t) => (container.state[key] = newState)
       ];
     }
 
@@ -232,14 +231,14 @@ export class Phelia {
       React.createElement(this.messageCache.get(container.name) as any, {
         useState,
         useModal,
-        props,
+        props
       })
     );
 
     await this.client.chat.update({
       ...message,
       channel: container.channelID,
-      ts: container.ts,
+      ts: container.ts
     });
 
     await Phelia.Storage.set(
@@ -250,7 +249,7 @@ export class Phelia {
         state: container.state,
         type: "home",
         viewID: container.viewID,
-        user: container.user,
+        user: container.user
       })
     );
   }
@@ -281,7 +280,7 @@ export class Phelia {
     function useState<t>(key: string): [t, (value: t) => void] {
       return [
         container.state[key],
-        (newState: t) => (container.state[key] = newState),
+        (newState: t) => (container.state[key] = newState)
       ];
     }
 
@@ -295,12 +294,12 @@ export class Phelia {
       React.createElement(this.homeComponent, {
         useState,
         useModal,
-        user: container.user,
+        user: container.user
       }),
       {
         value: undefined,
         event: { user: container.user },
-        type: "onupdate",
+        type: "onupdate"
       }
     );
 
@@ -308,13 +307,13 @@ export class Phelia {
       React.createElement(this.homeComponent, {
         useState,
         useModal,
-        user: container.user,
+        user: container.user
       })
     );
 
     await this.client.views.publish({
       view: home,
-      user_id: container.user.id,
+      user_id: container.user.id
     });
 
     await Phelia.Storage.set(
@@ -325,7 +324,7 @@ export class Phelia {
         state: container.state,
         type: "home",
         viewID: container.viewID,
-        user: container.user,
+        user: container.user
       })
     );
   }
@@ -335,7 +334,7 @@ export class Phelia {
 
     try {
       const userResponse = (await this.client.users.info({
-        user: id,
+        user: id
       })) as any;
 
       user.username = userResponse.user.profile.display_name;
@@ -381,7 +380,7 @@ export class Phelia {
           }
           return [
             initializedState[key],
-            (newValue: t) => (initializedState[key] = newValue),
+            (newValue: t) => (initializedState[key] = newValue)
           ];
         }
 
@@ -395,12 +394,12 @@ export class Phelia {
           React.createElement(this.homeComponent, {
             useState,
             useModal,
-            user,
+            user
           }),
           {
             value: undefined,
             event: { user },
-            type: "onload",
+            type: "onload"
           }
         );
 
@@ -408,13 +407,13 @@ export class Phelia {
           React.createElement(this.homeComponent, {
             useState,
             useModal,
-            user,
+            user
           })
         );
 
         const response: any = await this.client.views.publish({
           view: home,
-          user_id: payload.user,
+          user_id: payload.user
         });
 
         const viewID = response.view.id;
@@ -427,7 +426,7 @@ export class Phelia {
             state: initializedState,
             type: "home",
             viewID,
-            user,
+            user
           })
         );
 
@@ -441,7 +440,7 @@ export class Phelia {
         function useState<t>(key: string): [t, (value: t) => void] {
           return [
             container.state[key],
-            (newState: t) => (container.state[key] = newState),
+            (newState: t) => (container.state[key] = newState)
           ];
         }
 
@@ -455,12 +454,12 @@ export class Phelia {
           React.createElement(this.homeComponent, {
             useState,
             useModal,
-            user,
+            user
           }),
           {
             value: undefined,
             event: { user },
-            type: "onload",
+            type: "onload"
           }
         );
 
@@ -468,13 +467,13 @@ export class Phelia {
           React.createElement(this.homeComponent, {
             useState,
             useModal,
-            user,
+            user
           })
         );
 
         await this.client.views.publish({
           view: home,
-          user_id: payload.user,
+          user_id: payload.user
         });
 
         await Phelia.Storage.set(
@@ -485,7 +484,7 @@ export class Phelia {
             state: container.state,
             type: "home",
             viewID: container.viewID,
-            user,
+            user
           })
         );
 
@@ -524,7 +523,7 @@ export class Phelia {
         (newValue: t): void => {
           container.state[key] = newValue;
           setState(newValue);
-        },
+        }
       ];
     }
 
@@ -550,8 +549,8 @@ export class Phelia {
           trigger_id: payload.trigger_id,
           view: {
             ...message,
-            notify_on_close: true,
-          },
+            notify_on_close: true
+          }
         });
 
         const viewID = response.view.id;
@@ -568,7 +567,7 @@ export class Phelia {
             type: "modal",
             modalType: "inline",
             viewID,
-            user,
+            user
           })
         );
       };
@@ -580,12 +579,12 @@ export class Phelia {
           useState,
           props: container.props,
           useModal,
-          user: container.type === "home" ? user : undefined,
+          user: container.type === "home" ? user : undefined
         }),
         {
           value: action.action_id,
           event: generateEvent(action, user),
-          type: "interaction",
+          type: "interaction"
         }
       );
     }
@@ -595,7 +594,7 @@ export class Phelia {
         useState,
         props: container.props,
         useModal,
-        user: container.type === "home" ? payload.user : undefined,
+        user: container.type === "home" ? payload.user : undefined
       })
     );
 
@@ -604,20 +603,20 @@ export class Phelia {
         await this.client.chat.update({
           ...message,
           channel: container.channelID,
-          ts: container.ts,
+          ts: container.ts
         });
       } else if (container.type === "modal") {
         await this.client.views.update({
           view_id: messageKey,
           view: {
             ...message,
-            notify_on_close: true,
-          },
+            notify_on_close: true
+          }
         });
       } else {
         await this.client.views.update({
           view_id: messageKey,
-          view: message,
+          view: message
         });
       }
     }
@@ -627,7 +626,7 @@ export class Phelia {
       JSON.stringify({
         ...container,
         message: JSON.stringify(message),
-        user,
+        user
       })
     );
   }
@@ -670,7 +669,7 @@ export class Phelia {
         (newValue: t): void => {
           invokerContainer.state[key] = newValue;
           setState(newValue);
-        },
+        }
       ];
     }
 
@@ -774,7 +773,7 @@ export class Phelia {
         useState,
         props: invokerContainer.props,
         useModal,
-        user: invokerContainer.type === "home" ? payload.user : undefined,
+        user: invokerContainer.type === "home" ? payload.user : undefined
       }),
       !isRootModal
         ? undefined
@@ -782,9 +781,9 @@ export class Phelia {
             value: undefined,
             event: {
               form,
-              user: payload.user,
+              user: payload.user
             } as InteractionEvent,
-            type: form === undefined ? "oncancel" : "onsubmit",
+            type: form === undefined ? "oncancel" : "onsubmit"
           }
     );
 
@@ -795,7 +794,7 @@ export class Phelia {
         useState,
         props: invokerContainer.props,
         useModal,
-        user: invokerContainer.type === "home" ? payload.user : undefined,
+        user: invokerContainer.type === "home" ? payload.user : undefined
       })
     );
 
@@ -804,18 +803,18 @@ export class Phelia {
         await this.client.chat.update({
           ...message,
           channel: invokerContainer.channelID,
-          ts: invokerContainer.ts,
+          ts: invokerContainer.ts
         });
       } else if (invokerContainer.type === "modal") {
         await this.client.views.update({
           view_id: messageKey,
-          view: message,
+          view: message
         });
       } else {
         await this.client.views.publish({
           view_id: messageKey,
           view: message,
-          user_id: payload.user.id,
+          user_id: payload.user.id
         });
       }
     }
@@ -825,7 +824,7 @@ export class Phelia {
       JSON.stringify({
         ...invokerContainer,
         user: payload.user,
-        message: JSON.stringify(message),
+        message: JSON.stringify(message)
       })
     );
   }
@@ -859,19 +858,19 @@ export class Phelia {
         {
           useState,
           props: container.props,
-          useModal,
+          useModal
         }
       ),
       {
         value: payload.action_id,
         event: { user: payload.user },
-        type: "interaction",
+        type: "interaction"
       }
     );
 
     const optionsComponent = await onSearchOptions({
       user: payload.user,
-      query: payload.value,
+      query: payload.value
     });
 
     const { options, option_groups } = await render(
@@ -879,7 +878,7 @@ export class Phelia {
         placeholder: "",
         action: "",
         type: "static",
-        children: optionsComponent,
+        children: optionsComponent
       })
     );
 
@@ -917,7 +916,7 @@ export class Phelia {
 
     const adapter = createMessageAdapter(signingSecret, {
       ...slackOptions,
-      syncResponseTimeout: 3000,
+      syncResponseTimeout: 3000
     });
 
     adapter.viewSubmission(new RegExp(/.*/), async (payload) => {
