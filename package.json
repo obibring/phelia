@@ -1,16 +1,18 @@
 {
   "name": "phelia",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "license": "MIT",
-  "repository": "https://github.com/maxchehab/phelia",
+  "repository": "https://github.com/obibring/phelia",
   "devDependencies": {
+    "@sytten/ts-node-dev": "^1.0.3",
     "@types/express": "^4.17.4",
     "@types/jest": "^25.2.1",
     "@types/node": "12.7.0",
     "@types/react": "^16.9.32",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
+    "dotenv": "4.0.0",
     "eslint": "^6.8.0",
     "eslint-plugin-jsdoc": "^23.0.0",
     "jest": "^25.2.7",
@@ -25,6 +27,7 @@
     "@slack/web-api": "^5.8.0",
     "@types/react-dom": "^16.9.6",
     "@types/react-reconciler": "^0.18.0",
+    "@slack/bolt": "^3.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "react": "^16.13.1",
@@ -39,6 +42,6 @@
     "clean": "yarn rimraf dist",
     "prestart": "yarn build",
     "prepublish": "yarn lint && yarn test && yarn clean && yarn build --project prod.tsconfig.json",
-    "start": "node dist/example/server.js"
+    "start": "node --require dotenv/config dist/example/server.js"
   }
 }
