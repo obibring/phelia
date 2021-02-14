@@ -90,10 +90,66 @@ export class Phelia {
       })
     );
   }
+  async postMessage<p>(
+    message: PheliaMessage<p>,
+    channel: string,
+    props: p = null,
+    slackOptions?: ChatPostMessageArguments
+  ): Promise<string> {
+    const initializedState: { [key: string]: any } = {};
+
+    /** A hook to create some state for a component */
+    function useState<t>(
+      key: string,
+      initialValue?: t
+    ): [t, (value: t) => void] {
+      initializedState[key] = initialValue;
+      return [initialValue, (_: t): void => null];
+    }
+
+    /** A hook to create a modal for a component */
+    function useModal(): (title: string, props?: any) => Promise<void> {
+      return async () => null;
+    }
+
+    const messageData = await render(
+      React.createElement(message, { useState, props, useModal })
+    );
+
+    const {
+      channel: channelID,
+      ts,
+      message: sentMessageData
+    } = await this.client.chat.postMessage({
+      ...messageData,
+      ...slackOptions,
+      channel
+    });
+
+    const user = await this.enrichUser((sentMessageData as any).user);
+
+    const messageKey = `${channelID}:${ts}`;
+
+    await Phelia.Storage.set(
+      messageKey,
+      JSON.stringify({
+        message: JSON.stringify(messageData),
+        type: "message",
+        name: message.name,
+        state: initializedState,
+        user,
+        props,
+        channelID,
+        ts
+      })
+    );
+
+    return messageKey;
+  }
 
   async render_message<p>(
     message: PheliaMessage<p>,
-    props: p = null
+    props: p
   ): Promise<
     [
       any,

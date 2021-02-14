@@ -53,7 +53,7 @@ interface ButtonBase {
      */
     url?: string;
 }
-interface ButtonWithOnClick extends ButtonBase {
+declare type ButtonWithOnClick = ButtonBase & ({
     /** A callback ran when the button is clicked */
     onClick: (event: InteractionEvent) => void | Promise<void>;
     /**
@@ -63,14 +63,34 @@ interface ButtonWithOnClick extends ButtonBase {
      * length for this field is 255 characters.
      */
     action: string;
-}
+    url?: never;
+} | {
+    onClick?: never;
+    action?: never;
+    url: string;
+});
 /**
  * An interactive component that inserts a button. The button can be a trigger for
  * anything from opening a simple link to starting a complex workflow.
  *
  * Works with block types: Section, Actions
  */
-export declare const Button: (props: (import("ts-xor/dist/types/Without.type").Without<ButtonWithOnClick, ButtonBase> & ButtonBase) | (import("ts-xor/dist/types/Without.type").Without<ButtonBase, ButtonWithOnClick> & ButtonWithOnClick)) => JSX.Element;
+export declare const Button: (props: (import("ts-xor/dist/types/Without.type").Without<ButtonWithOnClick, ButtonBase> & ButtonBase) | (import("ts-xor/dist/types/Without.type").Without<ButtonBase, ButtonWithOnClick> & ButtonBase & {
+    /** A callback ran when the button is clicked */
+    onClick: (event: InteractionEvent) => void | Promise<void>;
+    /**
+     * An identifier for this action. You can use this when you receive an
+     * interaction payload to identify the source of the action. Should be
+     * unique among all other action_ids used elsewhere by your app. Maximum
+     * length for this field is 255 characters.
+     */
+    action: string;
+    url?: never;
+}) | (import("ts-xor/dist/types/Without.type").Without<ButtonBase, ButtonWithOnClick> & ButtonBase & {
+    onClick?: never;
+    action?: never;
+    url: string;
+})) => JSX.Element;
 declare type SectionProps = {
     /** One of the available components. */
     accessory?: ReactElement;

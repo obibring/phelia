@@ -10,7 +10,7 @@ import {
   InputBlock,
   Option as SlackOption,
   PlainTextInput,
-  SectionBlock,
+  SectionBlock
 } from "@slack/web-api";
 import { XOR } from "ts-xor";
 import {
@@ -19,7 +19,7 @@ import {
   SearchOptionsEvent,
   SelectDateEvent,
   SelectOptionEvent,
-  SubmitEvent,
+  SubmitEvent
 } from "./interfaces";
 
 type PheliaChild = false | null | undefined | ReactElement | ReactElement[];
@@ -68,10 +68,11 @@ export const Text = (props: TextProps) => (
 );
 
 Text.defaultProps = {
-  type: "plain_text",
+  type: "plain_text"
 };
 
 interface ButtonBase {
+  value?: string
   /** The text inside the button. */
   children: string;
   /**
@@ -94,17 +95,26 @@ interface ButtonBase {
   url?: string;
 }
 
-interface ButtonWithOnClick extends ButtonBase {
-  /** A callback ran when the button is clicked */
-  onClick: (event: InteractionEvent) => void | Promise<void>;
-  /**
-   * An identifier for this action. You can use this when you receive an
-   * interaction payload to identify the source of the action. Should be
-   * unique among all other action_ids used elsewhere by your app. Maximum
-   * length for this field is 255 characters.
-   */
-  action: string;
-}
+type ButtonWithOnClick = ButtonBase &
+  (
+    | {
+        /** A callback ran when the button is clicked */
+        onClick: (event: InteractionEvent) => void | Promise<void>;
+        /**
+         * An identifier for this action. You can use this when you receive an
+         * interaction payload to identify the source of the action. Should be
+         * unique among all other action_ids used elsewhere by your app. Maximum
+         * length for this field is 255 characters.
+         */
+        action: string;
+        url?: never;
+      }
+    | {
+        onClick?: never;
+        action?: never;
+        url: string;
+      }
+  );
 
 type ButtonProps = XOR<ButtonWithOnClick, ButtonBase>;
 
@@ -124,7 +134,8 @@ export const Button = (props: ButtonProps) => (
         action_id: props.action,
         style: props.style,
         url: props.url,
-        text: { type: "plain_text", text: "", emoji: props.emoji },
+        value: props.value,
+        text: { type: "plain_text", text: "", emoji: props.emoji }
       };
 
       const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -168,7 +179,7 @@ export const Section = (props: SectionProps) => (
     componentType="section"
     toSlackElement={(props, reconcile, promises): SectionBlock => {
       const instance: SectionBlock = {
-        type: "section",
+        type: "section"
       };
       const [accessory, accessoryPromises] = reconcile(props.accessory);
       const [text, textPromises] = reconcile(props.text);
@@ -207,7 +218,7 @@ export const Actions = (props: ActionsProps) => (
     componentType="actions"
     toSlackElement={(): ActionsBlock => ({
       type: "actions",
-      elements: [],
+      elements: []
     })}
   />
 );
@@ -234,7 +245,7 @@ export const Image = (props: ImageProps) => (
     toSlackElement={(props): ImageElement => ({
       type: "image",
       image_url: props.imageUrl,
-      alt_text: props.alt,
+      alt_text: props.alt
     })}
   />
 );
@@ -267,14 +278,14 @@ export const ImageBlock = (props: ImageBlockProps) => (
       const instance: any = {
         type: "image",
         image_url: props.imageUrl,
-        alt_text: props.alt,
+        alt_text: props.alt
       };
 
       if (props.title) {
         instance.title = {
           type: "plain_text",
           text: props.title,
-          emoji: props.emoji,
+          emoji: props.emoji
         };
       }
 
@@ -355,7 +366,7 @@ export const Confirm = (props: ConfirmProps) => (
         // whereas slack forbids a confirm object to have a 'type' property
         isConfirm: () => true,
 
-        style: props.style,
+        style: props.style
       };
 
       const [title, titlePromises] = reconcile(props.title);
@@ -419,7 +430,7 @@ export const Option = (props: OptionProps) => (
         isSelected: () => props.selected,
         isOption: () => true,
         value: props.value,
-        url: props.url,
+        url: props.url
       };
 
       const [description, descriptionPromises] = reconcile(props.description);
@@ -477,7 +488,7 @@ export const DatePicker = (props: DatePickerProps) => (
       const instance: Datepicker = {
         type: "datepicker",
         initial_date: props.initialDate,
-        action_id: props.action,
+        action_id: props.action
       };
 
       const [placeholder, placeholderPromises] = reconcile(props.placeholder);
@@ -535,11 +546,11 @@ interface BaseModalProps {
 
   /**
    * An optional callback that executes when the modal is submitted.
-   */ 
+   */
   onSubmit?: (event: SubmitEvent) => Promise<void>;
   /**
    * An optional callback that executes when the modal is canceled.
-   */ 
+   */
   onCancel?: (event: InteractionEvent) => Promise<void>;
 }
 
@@ -554,7 +565,7 @@ type RootModalProps = BaseModalProps & {
    * An optional callback that executes when the modal is canceled.
    */
   onCancel?: (event: InteractionEvent) => Promise<void>;
-}
+};
 
 type InlineModalProps = BaseModalProps & {
   /** A modal subtype indicating this modal was opened by another component. */
@@ -574,7 +585,7 @@ export const Modal = (props: ModalProps) => (
     toSlackElement={(props, reconcile, promises) => {
       const instance: any = {
         type: "modal",
-        blocks: [],
+        blocks: []
       };
 
       const [title, titlePromises] = reconcile(props.title);
@@ -642,7 +653,7 @@ export const Input = (props: InputProps) => (
     toSlackElement={(props, reconcile, promises): InputBlock => {
       const instance: any = {
         type: "input",
-        optional: props.optional,
+        optional: props.optional
       };
 
       const [hint, hintPromises] = reconcile(props.hint);
@@ -720,7 +731,7 @@ export const TextField = (props: TextFieldProps) => (
         action_id: props.action,
         max_length: props.maxLength,
         min_length: props.minLength,
-        multiline: props.multiline,
+        multiline: props.multiline
       };
 
       const [placeholder, placeholderPromises] = reconcile(props.placeholder);
@@ -772,7 +783,7 @@ export const Checkboxes = (props: CheckboxesProps) => (
       const instance: any = {
         type: "checkboxes",
         action_id: props.action,
-        options: [],
+        options: []
       };
 
       const [{ fields: options }, optionPromises] = reconcile(
@@ -841,7 +852,7 @@ export const OverflowMenu = (props: OverflowMenuProps) => (
       const instance: any = {
         type: "overflow",
         action_id: props.action,
-        options: [],
+        options: []
       };
 
       const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -889,7 +900,7 @@ export const RadioButtons = (props: RadioButtonsProps) => (
       const instance: any = {
         type: "radio_buttons",
         action_id: props.action,
-        options: [],
+        options: []
       };
 
       const [{ fields: options }, optionPromises] = reconcile(
@@ -901,7 +912,7 @@ export const RadioButtons = (props: RadioButtonsProps) => (
         const selectedOption = options
           .map((option) => ({
             ...option,
-            url: undefined,
+            url: undefined
           }))
           .find((option) => option?.isSelected());
 
@@ -936,7 +947,7 @@ export const OptionGroup = (props: OptionGroupProps) => (
     toSlackElement={(props, reconcile, promises) => {
       const instance: any = {
         isOptionGroup: () => true,
-        options: [],
+        options: []
       };
 
       const [label, labelPromises] = reconcile(props.label);
@@ -1085,7 +1096,7 @@ export const SelectMenu = (props: SelectMenuProps) => (
       const instance: any = {
         type: props.type + "_select",
         action_id: props.action,
-        onSearchOptions: props.onSearchOptions,
+        onSearchOptions: props.onSearchOptions
       };
 
       const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -1115,7 +1126,7 @@ export const SelectMenu = (props: SelectMenuProps) => (
         const selectedOption = options
           .map((option) => ({
             ...option,
-            url: undefined,
+            url: undefined
           }))
           .find((option) => option?.isSelected());
 
@@ -1176,7 +1187,7 @@ export const SelectMenu = (props: SelectMenuProps) => (
 );
 
 SelectMenu.defaultProps = {
-  type: "static",
+  type: "static"
 } as SelectMenuProps;
 
 interface MultiSelectMenuBase {
@@ -1297,7 +1308,7 @@ export const MultiSelectMenu = (props: MultiSelectMenuProps) => (
         type: "multi_" + props.type + "_select",
         action_id: props.action,
         max_selected_items: props.maxSelectedItems,
-        onSearchOptions: props.onSearchOptions,
+        onSearchOptions: props.onSearchOptions
       };
 
       const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -1327,7 +1338,7 @@ export const MultiSelectMenu = (props: MultiSelectMenuProps) => (
         const selectedOptions = options
           .map((option) => ({
             ...option,
-            url: undefined,
+            url: undefined
           }))
           .filter((option) => option?.isSelected());
 
@@ -1381,7 +1392,7 @@ export const MultiSelectMenu = (props: MultiSelectMenuProps) => (
 );
 
 MultiSelectMenu.defaultProps = {
-  type: "static",
+  type: "static"
 } as MultiSelectMenuProps;
 
 interface HomeProps {
@@ -1405,7 +1416,7 @@ export const Home = (props: HomeProps) => (
     toSlackElement={() => {
       const instance: any = {
         type: "home",
-        blocks: [],
+        blocks: []
       };
 
       return instance;

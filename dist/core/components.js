@@ -19,7 +19,7 @@ exports.Text = (props) => (react_1.default.createElement("component", Object.ass
         return instance;
     } })));
 exports.Text.defaultProps = {
-    type: "plain_text",
+    type: "plain_text"
 };
 /**
  * An interactive component that inserts a button. The button can be a trigger for
@@ -33,7 +33,8 @@ exports.Button = (props) => (react_1.default.createElement("component", Object.a
             action_id: props.action,
             style: props.style,
             url: props.url,
-            text: { type: "plain_text", text: "", emoji: props.emoji },
+            value: props.value,
+            text: { type: "plain_text", text: "", emoji: props.emoji }
         };
         const [confirm, confirmPromises] = reconcile(props.confirm);
         instance.confirm = confirm;
@@ -49,7 +50,7 @@ exports.Button = (props) => (react_1.default.createElement("component", Object.a
  */
 exports.Section = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "section", toSlackElement: (props, reconcile, promises) => {
         const instance = {
-            type: "section",
+            type: "section"
         };
         const [accessory, accessoryPromises] = reconcile(props.accessory);
         const [text, textPromises] = reconcile(props.text);
@@ -68,7 +69,7 @@ exports.Section = (props) => (react_1.default.createElement("component", Object.
  */
 exports.Actions = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "actions", toSlackElement: () => ({
         type: "actions",
-        elements: [],
+        elements: []
     }) })));
 /**
  * A simple image block, designed to make those cat photos really pop.
@@ -78,7 +79,7 @@ exports.Actions = (props) => (react_1.default.createElement("component", Object.
 exports.Image = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "image", toSlackElement: (props) => ({
         type: "image",
         image_url: props.imageUrl,
-        alt_text: props.alt,
+        alt_text: props.alt
     }) })));
 /**
  * An component to insert an image as part of a larger block of content. If you
@@ -90,13 +91,13 @@ exports.ImageBlock = (props) => (react_1.default.createElement("component", Obje
         const instance = {
             type: "image",
             image_url: props.imageUrl,
-            alt_text: props.alt,
+            alt_text: props.alt
         };
         if (props.title) {
             instance.title = {
                 type: "plain_text",
                 text: props.title,
-                emoji: props.emoji,
+                emoji: props.emoji
             };
         }
         return instance;
@@ -124,7 +125,7 @@ exports.Confirm = (props) => (react_1.default.createElement("component", Object.
             // using a function so the appendInitialChild can determine the type of the component
             // whereas slack forbids a confirm object to have a 'type' property
             isConfirm: () => true,
-            style: props.style,
+            style: props.style
         };
         const [title, titlePromises] = reconcile(props.title);
         const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -147,7 +148,7 @@ exports.Option = (props) => (react_1.default.createElement("component", Object.a
             isSelected: () => props.selected,
             isOption: () => true,
             value: props.value,
-            url: props.url,
+            url: props.url
         };
         const [description, descriptionPromises] = reconcile(props.description);
         instance.description = description;
@@ -166,7 +167,7 @@ exports.DatePicker = (props) => (react_1.default.createElement("component", Obje
         const instance = {
             type: "datepicker",
             initial_date: props.initialDate,
-            action_id: props.action,
+            action_id: props.action
         };
         const [placeholder, placeholderPromises] = reconcile(props.placeholder);
         const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -190,7 +191,7 @@ exports.Message = (props) => (react_1.default.createElement("component", Object.
 exports.Modal = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "modal", toSlackElement: (props, reconcile, promises) => {
         const instance = {
             type: "modal",
-            blocks: [],
+            blocks: []
         };
         const [title, titlePromises] = reconcile(props.title);
         const [submit, submitPromises] = reconcile(props.submit);
@@ -221,7 +222,7 @@ exports.Modal = (props) => (react_1.default.createElement("component", Object.as
 exports.Input = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "input", toSlackElement: (props, reconcile, promises) => {
         const instance = {
             type: "input",
-            optional: props.optional,
+            optional: props.optional
         };
         const [hint, hintPromises] = reconcile(props.hint);
         const [label, labelPromises] = reconcile(props.label);
@@ -253,7 +254,7 @@ exports.TextField = (props) => (react_1.default.createElement("component", Objec
             action_id: props.action,
             max_length: props.maxLength,
             min_length: props.minLength,
-            multiline: props.multiline,
+            multiline: props.multiline
         };
         const [placeholder, placeholderPromises] = reconcile(props.placeholder);
         instance.placeholder = placeholder;
@@ -274,7 +275,7 @@ exports.Checkboxes = (props) => (react_1.default.createElement("component", Obje
         const instance = {
             type: "checkboxes",
             action_id: props.action,
-            options: [],
+            options: []
         };
         const [{ fields: options }, optionPromises] = reconcile(react_1.default.createElement(exports.Section, { children: props.children }));
         const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -306,7 +307,7 @@ exports.OverflowMenu = (props) => (react_1.default.createElement("component", Ob
         const instance = {
             type: "overflow",
             action_id: props.action,
-            options: [],
+            options: []
         };
         const [confirm, confirmPromises] = reconcile(props.confirm);
         instance.confirm = confirm;
@@ -324,7 +325,7 @@ exports.RadioButtons = (props) => (react_1.default.createElement("component", Ob
         const instance = {
             type: "radio_buttons",
             action_id: props.action,
-            options: [],
+            options: []
         };
         const [{ fields: options }, optionPromises] = reconcile(react_1.default.createElement(exports.Section, { children: props.children }));
         const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -342,7 +343,7 @@ exports.RadioButtons = (props) => (react_1.default.createElement("component", Ob
 exports.OptionGroup = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "option-group", toSlackElement: (props, reconcile, promises) => {
         const instance = {
             isOptionGroup: () => true,
-            options: [],
+            options: []
         };
         const [label, labelPromises] = reconcile(props.label);
         instance.label = label;
@@ -371,7 +372,7 @@ exports.SelectMenu = (props) => (react_1.default.createElement("component", Obje
         const instance = {
             type: props.type + "_select",
             action_id: props.action,
-            onSearchOptions: props.onSearchOptions,
+            onSearchOptions: props.onSearchOptions
         };
         const [confirm, confirmPromises] = reconcile(props.confirm);
         const [placeholder, placeholderPromises] = reconcile(props.placeholder);
@@ -432,7 +433,7 @@ exports.SelectMenu = (props) => (react_1.default.createElement("component", Obje
         return instance;
     } })));
 exports.SelectMenu.defaultProps = {
-    type: "static",
+    type: "static"
 };
 /**
  * A multi-select menu allows a user to select multiple items from a list of options.
@@ -454,7 +455,7 @@ exports.MultiSelectMenu = (props) => (react_1.default.createElement("component",
             type: "multi_" + props.type + "_select",
             action_id: props.action,
             max_selected_items: props.maxSelectedItems,
-            onSearchOptions: props.onSearchOptions,
+            onSearchOptions: props.onSearchOptions
         };
         const [confirm, confirmPromises] = reconcile(props.confirm);
         const [placeholder, placeholderPromises] = reconcile(props.placeholder);
@@ -507,7 +508,7 @@ exports.MultiSelectMenu = (props) => (react_1.default.createElement("component",
         return instance;
     } })));
 exports.MultiSelectMenu.defaultProps = {
-    type: "static",
+    type: "static"
 };
 /**
  * The Home tab is a persistent, yet dynamic interface for apps that lives within the App Home.
@@ -515,7 +516,7 @@ exports.MultiSelectMenu.defaultProps = {
 exports.Home = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "home", toSlackElement: () => {
         const instance = {
             type: "home",
-            blocks: [],
+            blocks: []
         };
         return instance;
     } })));

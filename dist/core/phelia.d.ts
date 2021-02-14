@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { MessageAdapterOptions } from "@slack/interactive-messages/dist/adapter";
-import { WebClient, ChatPostEphemeralArguments } from "@slack/web-api";
+import { WebClient, ChatPostMessageArguments, ChatPostEphemeralArguments } from "@slack/web-api";
 import { MessageCallback, PheliaMessage, PheliaModal, PheliaStorage, PheliaHome, SlackUser } from "./interfaces";
 /** The main phelia client. Handles sending messages with phelia components */
 export declare class Phelia {
@@ -11,7 +11,8 @@ export declare class Phelia {
     setStorage(storage: PheliaStorage): void;
     constructor(client: WebClient);
     openModal<p>(modal: PheliaModal<p>, triggerID: string, props?: p): Promise<void>;
-    render_message<p>(message: PheliaMessage<p>, props?: p): Promise<[any, (sent_message_data: {
+    postMessage<p>(message: PheliaMessage<p>, channel: string, props?: p, slackOptions?: ChatPostMessageArguments): Promise<string>;
+    render_message<p>(message: PheliaMessage<p>, props: p): Promise<[any, (sent_message_data: {
         user_id: string;
         timestamp: any;
         channel_id: string;

@@ -1,6 +1,6 @@
 {
-  "name": "phelia",
-  "version": "0.2.0",
+  "name": "@obibring/phelia",
+  "version": "0.2.1",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": "https://github.com/obibring/phelia",
@@ -37,6 +37,7 @@
   },
   "scripts": {
     "test": "jest",
+    "copy": "cp -r dist/core/* /Users/orr/dev/plater/node_modules/@obibring/phelia/dist/core/",
     "lint": "eslint src --ext ts --ext tsx",
     "build": "tsc",
     "clean": "yarn rimraf dist",

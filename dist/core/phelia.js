@@ -57,7 +57,36 @@ class Phelia {
             }));
         });
     }
-    render_message(message, props = null) {
+    postMessage(message, channel, props = null, slackOptions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const initializedState = {};
+            /** A hook to create some state for a component */
+            function useState(key, initialValue) {
+                initializedState[key] = initialValue;
+                return [initialValue, (_) => null];
+            }
+            /** A hook to create a modal for a component */
+            function useModal() {
+                return () => __awaiter(this, void 0, void 0, function* () { return null; });
+            }
+            const messageData = yield reconciler_1.render(react_1.default.createElement(message, { useState, props, useModal }));
+            const { channel: channelID, ts, message: sentMessageData } = yield this.client.chat.postMessage(Object.assign(Object.assign(Object.assign({}, messageData), slackOptions), { channel }));
+            const user = yield this.enrichUser(sentMessageData.user);
+            const messageKey = `${channelID}:${ts}`;
+            yield Phelia.Storage.set(messageKey, JSON.stringify({
+                message: JSON.stringify(messageData),
+                type: "message",
+                name: message.name,
+                state: initializedState,
+                user,
+                props,
+                channelID,
+                ts
+            }));
+            return messageKey;
+        });
+    }
+    render_message(message, props) {
         return __awaiter(this, void 0, void 0, function* () {
             const initializedState = {};
             /** A hook to create some state for a component */
