@@ -133,10 +133,10 @@ export const Button = (props: ButtonProps) => (
     toSlackElement={(props, reconcile, promises): SlackButton => {
       const instance: SlackButton = {
         type: "button",
-        action_id: props.action,
-        style: props.style,
-        url: props.url,
-        value: props.value,
+        ...(props.action && { action_id: props.action }),
+        ...(props.style && { style: props.style }),
+        ...(props.url && { url: props.url }),
+        ...(props.value && { value: props.value }),
         text: { type: "plain_text", text: "", emoji: props.emoji }
       };
 

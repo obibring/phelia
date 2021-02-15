@@ -56,7 +56,7 @@ interface ButtonBase {
 }
 declare type ButtonWithOnClick = ButtonBase & ({
     /** A callback ran when the button is clicked */
-    onClick: (event: InteractionEvent) => void | Promise<void>;
+    onClick?: (event: InteractionEvent) => void | Promise<void>;
     /**
      * An identifier for this action. You can use this when you receive an
      * interaction payload to identify the source of the action. Should be
@@ -80,7 +80,7 @@ declare type ButtonWithOnClick = ButtonBase & ({
  */
 export declare const Button: (props: (import("ts-xor/dist/types/Without.type").Without<ButtonWithOnClick, ButtonBase> & ButtonBase) | (import("ts-xor/dist/types/Without.type").Without<ButtonBase, ButtonWithOnClick> & ButtonBase & {
     /** A callback ran when the button is clicked */
-    onClick: (event: InteractionEvent) => void | Promise<void>;
+    onClick?: (event: InteractionEvent) => void | Promise<void>;
     /**
      * An identifier for this action. You can use this when you receive an
      * interaction payload to identify the source of the action. Should be
