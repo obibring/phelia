@@ -32,6 +32,7 @@ export declare const Text: {
     };
 };
 interface ButtonBase {
+    value?: string;
     /** The text inside the button. */
     children: string;
     /**
@@ -63,11 +64,13 @@ declare type ButtonWithOnClick = ButtonBase & ({
      * length for this field is 255 characters.
      */
     action: string;
-    url?: never;
+    url?: undefined;
+    value?: string;
 } | {
-    onClick?: never;
-    action?: never;
+    onClick?: undefined;
+    action?: undefined;
     url: string;
+    value?: undefined;
 });
 /**
  * An interactive component that inserts a button. The button can be a trigger for
@@ -85,11 +88,13 @@ export declare const Button: (props: (import("ts-xor/dist/types/Without.type").W
      * length for this field is 255 characters.
      */
     action: string;
-    url?: never;
+    url?: undefined;
+    value?: string;
 }) | (import("ts-xor/dist/types/Without.type").Without<ButtonBase, ButtonWithOnClick> & ButtonBase & {
-    onClick?: never;
-    action?: never;
+    onClick?: undefined;
+    action?: undefined;
     url: string;
+    value?: undefined;
 })) => JSX.Element;
 declare type SectionProps = {
     /** One of the available components. */

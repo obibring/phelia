@@ -72,7 +72,7 @@ Text.defaultProps = {
 };
 
 interface ButtonBase {
-  value?: string
+  value?: string;
   /** The text inside the button. */
   children: string;
   /**
@@ -99,7 +99,7 @@ type ButtonWithOnClick = ButtonBase &
   (
     | {
         /** A callback ran when the button is clicked */
-        onClick: (event: InteractionEvent) => void | Promise<void>;
+        onClick?: (event: InteractionEvent) => void | Promise<void>;
         /**
          * An identifier for this action. You can use this when you receive an
          * interaction payload to identify the source of the action. Should be
@@ -107,12 +107,14 @@ type ButtonWithOnClick = ButtonBase &
          * length for this field is 255 characters.
          */
         action: string;
-        url?: never;
+        url?: undefined;
+        value?: string;
       }
     | {
-        onClick?: never;
-        action?: never;
+        onClick?: undefined;
+        action?: undefined;
         url: string;
+        value?: undefined;
       }
   );
 
