@@ -562,7 +562,6 @@ interface ExternalSelectMenu extends SelectMenuBase {
      */
     initialOption?: ReactElement;
     /** Called when a user is search the menu options. Should return result options */
-    onSearchOptions: SearchOptions;
     /**
      * 	When the typeahead field is used, a request will be sent on every character
      * change. If you prefer fewer requests or more fully ideated queries, use the
@@ -641,8 +640,6 @@ interface MultiSelectMenuBase {
      * before the multi-select choices are submitted.
      */
     confirm?: ReactElement;
-    /** Callback for when a menu item is selected */
-    onSelect?: (event: MultiSelectOptionEvent) => void | Promise<void>;
     /**
      * Specifies the maximum number of items that can be selected in the menu.
      * Minimum number is 1.
@@ -679,8 +676,6 @@ interface MultiExternalSelectMenu extends MultiSelectMenuBase {
      * selected when the menu initially loads.
      */
     initialOptions?: ReactElement[];
-    /** Called when a user is search the select options. Should return result options */
-    onSearchOptions: SearchOptions;
     /**
      * When the typeahead field is used, a request will be sent on every character change.
      * If you prefer fewer requests or more fully ideated queries, use the min_query_length

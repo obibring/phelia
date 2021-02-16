@@ -1,6 +1,6 @@
 {
   "name": "@obibring/phelia",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "dist/index.js",
   "license": "MIT",
   "repository": "https://github.com/obibring/phelia",
@@ -39,7 +39,7 @@
     "test": "jest",
     "copy": "yarn build && cp -r dist/core/* /Users/orr/dev/plater/node_modules/@obibring/phelia/dist/core/",
     "lint": "eslint src --ext ts --ext tsx",
-    "build": "tsc",
+    "build": "tsc -p prod.tsconfig.json",
     "clean": "yarn rimraf dist",
     "prestart": "yarn build",
     "prepublish": "yarn lint && yarn test && yarn clean && yarn build --project prod.tsconfig.json",

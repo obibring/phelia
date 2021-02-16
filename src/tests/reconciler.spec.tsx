@@ -20,8 +20,7 @@ import {
   RadioButtons,
   OptionGroup,
   SelectMenu,
-  getOnSearchOptions,
-  MultiSelectMenu,
+  MultiSelectMenu
 } from "../core";
 
 describe("Text", () => {
@@ -174,12 +173,12 @@ describe("Section", () => {
           username: "johnsmith",
           name: "john smith",
           id: "u123",
-          team_id: "t123",
+          team_id: "t123"
         };
 
         await render(React.createElement(component), {
           value: "click",
-          event: { user },
+          event: { user }
         });
 
         expect(onClick).toBeCalledWith({ user });
@@ -289,12 +288,12 @@ describe("Button", () => {
           username: "johnsmith",
           name: "john smith",
           id: "u123",
-          team_id: "t123",
+          team_id: "t123"
         };
 
         await render(React.createElement(component), {
           value: "click",
-          event: { user },
+          event: { user }
         });
 
         expect(onClick).toBeCalledWith({ user });
@@ -325,12 +324,12 @@ describe("Button", () => {
         username: "johnsmith",
         name: "john smith",
         id: "u123",
-        team_id: "t123",
+        team_id: "t123"
       };
 
       await render(React.createElement(component), {
         value: "click",
-        event: { user },
+        event: { user }
       });
 
       expect(onClick).toBeCalledTimes(1);
@@ -575,7 +574,7 @@ describe("Option", () => {
 describe("DatePicker", () => {
   describe("Default DatePicker", () => {
     const onSubmit = jest.fn();
-    const component = () => <DatePicker onSelect={onSubmit} action="date" />;
+    const component = () => <DatePicker action="date" />;
 
     it("renders default DatePicker", async () => {
       const blocks = await render(React.createElement(component));
@@ -588,12 +587,12 @@ describe("DatePicker", () => {
           username: "johnsmith",
           name: "john smith",
           id: "u123",
-          team_id: "t123",
+          team_id: "t123"
         };
 
         await render(React.createElement(component), {
           value: "date",
-          event: { user, date: "2020-04-16" } as InteractionEvent,
+          event: { user, date: "2020-04-16" } as InteractionEvent
         });
 
         expect(onSubmit).toBeCalledWith({ user, date: "2020-04-16" });
@@ -604,11 +603,7 @@ describe("DatePicker", () => {
 
   describe("DatePicker with initial date property", () => {
     const component = () => (
-      <DatePicker
-        onSelect={() => null}
-        action="date"
-        initialDate="2020-11-11"
-      />
+      <DatePicker action="date" initialDate="2020-11-11" />
     );
 
     it("renders DatePicker with initial date property", async () => {
@@ -620,7 +615,6 @@ describe("DatePicker", () => {
   describe("DatePicker with string placeholder property", () => {
     const component = () => (
       <DatePicker
-        onSelect={() => null}
         action="date"
         initialDate="2020-11-11"
         placeholder="just a placeholder"
@@ -636,7 +630,6 @@ describe("DatePicker", () => {
   describe("DatePicker with Text component placeholder property", () => {
     const component = () => (
       <DatePicker
-        onSelect={() => null}
         action="date"
         initialDate="2020-11-11"
         placeholder={<Text emoji>just a placeholder</Text>}
@@ -652,7 +645,6 @@ describe("DatePicker", () => {
   describe("DatePicker with confirm property", () => {
     const component = () => (
       <DatePicker
-        onSelect={() => null}
         action="date"
         initialDate="2020-11-11"
         placeholder={<Text emoji>just a placeholder</Text>}
@@ -1338,14 +1330,6 @@ describe("External Select Menu", () => {
       <SelectMenu
         type="external"
         minQueryLength={100}
-        onSearchOptions={(event) => {
-          onSearchOptions(event);
-          return [
-            <OptionGroup key="1" label={"A group"}>
-              <Option value="option-1">This was loaded asynchronously</Option>
-            </OptionGroup>,
-          ];
-        }}
         action="select"
         placeholder="a placeholder"
       />
@@ -1354,35 +1338,6 @@ describe("External Select Menu", () => {
     it("renders a default External Select Menu", async () => {
       const blocks = await render(React.createElement(component));
       expect(blocks).toMatchSnapshot();
-    });
-
-    describe("When fetching onSearchOptions", () => {
-      it("fetches the correct onSearchOptions function", async () => {
-        const user = {
-          username: "johnsmith",
-          name: "john smith",
-          id: "u123",
-          team_id: "t123",
-        };
-
-        const onSearchOptionsFn = await getOnSearchOptions(component(), {
-          value: "select",
-          event: {
-            user,
-          },
-        });
-
-        await onSearchOptionsFn({
-          user,
-          query: "a query",
-        });
-
-        expect(onSearchOptions).toBeCalled();
-        expect(onSearchOptions).toBeCalledWith({
-          user,
-          query: "a query",
-        });
-      });
     });
   });
 });
@@ -1519,19 +1474,10 @@ describe("Multi Static Select Menu", () => {
 
 describe("Multi External Select Menu", () => {
   describe("Default Multi External Select Menu", () => {
-    const onSearchOptions = jest.fn();
     const component = () => (
       <MultiSelectMenu
         type="external"
         minQueryLength={100}
-        onSearchOptions={(event) => {
-          onSearchOptions(event);
-          return [
-            <OptionGroup key="1" label={"A group"}>
-              <Option value="option-1">This was loaded asynchronously</Option>
-            </OptionGroup>,
-          ];
-        }}
         action="select"
         placeholder="a placeholder"
       />
@@ -1540,35 +1486,6 @@ describe("Multi External Select Menu", () => {
     it("renders a default Multi External Select Menu", async () => {
       const blocks = await render(React.createElement(component));
       expect(blocks).toMatchSnapshot();
-    });
-
-    describe("When fetching onSearchOptions", () => {
-      it("fetches the correct onSearchOptions function", async () => {
-        const user = {
-          username: "johnsmith",
-          name: "john smith",
-          id: "u123",
-          team_id: "t123",
-        };
-
-        const onSearchOptionsFn = await getOnSearchOptions(component(), {
-          value: "select",
-          event: {
-            user,
-          },
-        });
-
-        await onSearchOptionsFn({
-          user,
-          query: "a query",
-        });
-
-        expect(onSearchOptions).toBeCalled();
-        expect(onSearchOptions).toBeCalledWith({
-          user,
-          query: "a query",
-        });
-      });
     });
   });
 });

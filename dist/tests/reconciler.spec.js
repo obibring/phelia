@@ -115,11 +115,11 @@ describe("Section", () => {
                     username: "johnsmith",
                     name: "john smith",
                     id: "u123",
-                    team_id: "t123",
+                    team_id: "t123"
                 };
                 yield core_1.render(react_1.default.createElement(component), {
                     value: "click",
-                    event: { user },
+                    event: { user }
                 });
                 expect(onClick).toBeCalledWith({ user });
                 expect(onClick).toBeCalledTimes(1);
@@ -185,11 +185,11 @@ describe("Button", () => {
                     username: "johnsmith",
                     name: "john smith",
                     id: "u123",
-                    team_id: "t123",
+                    team_id: "t123"
                 };
                 yield core_1.render(react_1.default.createElement(component), {
                     value: "click",
-                    event: { user },
+                    event: { user }
                 });
                 expect(onClick).toBeCalledWith({ user });
                 expect(onClick).toBeCalledTimes(1);
@@ -208,11 +208,11 @@ describe("Button", () => {
                 username: "johnsmith",
                 name: "john smith",
                 id: "u123",
-                team_id: "t123",
+                team_id: "t123"
             };
             yield core_1.render(react_1.default.createElement(component), {
                 value: "click",
-                event: { user },
+                event: { user }
             });
             expect(onClick).toBeCalledTimes(1);
         }));
@@ -358,7 +358,7 @@ describe("Option", () => {
 describe("DatePicker", () => {
     describe("Default DatePicker", () => {
         const onSubmit = jest.fn();
-        const component = () => react_1.default.createElement(core_1.DatePicker, { onSelect: onSubmit, action: "date" });
+        const component = () => react_1.default.createElement(core_1.DatePicker, { action: "date" });
         it("renders default DatePicker", () => __awaiter(void 0, void 0, void 0, function* () {
             const blocks = yield core_1.render(react_1.default.createElement(component));
             expect(blocks).toMatchSnapshot();
@@ -369,11 +369,11 @@ describe("DatePicker", () => {
                     username: "johnsmith",
                     name: "john smith",
                     id: "u123",
-                    team_id: "t123",
+                    team_id: "t123"
                 };
                 yield core_1.render(react_1.default.createElement(component), {
                     value: "date",
-                    event: { user, date: "2020-04-16" },
+                    event: { user, date: "2020-04-16" }
                 });
                 expect(onSubmit).toBeCalledWith({ user, date: "2020-04-16" });
                 expect(onSubmit).toBeCalledTimes(1);
@@ -381,28 +381,28 @@ describe("DatePicker", () => {
         });
     });
     describe("DatePicker with initial date property", () => {
-        const component = () => (react_1.default.createElement(core_1.DatePicker, { onSelect: () => null, action: "date", initialDate: "2020-11-11" }));
+        const component = () => (react_1.default.createElement(core_1.DatePicker, { action: "date", initialDate: "2020-11-11" }));
         it("renders DatePicker with initial date property", () => __awaiter(void 0, void 0, void 0, function* () {
             const blocks = yield core_1.render(react_1.default.createElement(component));
             expect(blocks).toMatchSnapshot();
         }));
     });
     describe("DatePicker with string placeholder property", () => {
-        const component = () => (react_1.default.createElement(core_1.DatePicker, { onSelect: () => null, action: "date", initialDate: "2020-11-11", placeholder: "just a placeholder" }));
+        const component = () => (react_1.default.createElement(core_1.DatePicker, { action: "date", initialDate: "2020-11-11", placeholder: "just a placeholder" }));
         it("renders DatePicker with string placeholder property", () => __awaiter(void 0, void 0, void 0, function* () {
             const blocks = yield core_1.render(react_1.default.createElement(component));
             expect(blocks).toMatchSnapshot();
         }));
     });
     describe("DatePicker with Text component placeholder property", () => {
-        const component = () => (react_1.default.createElement(core_1.DatePicker, { onSelect: () => null, action: "date", initialDate: "2020-11-11", placeholder: react_1.default.createElement(core_1.Text, { emoji: true }, "just a placeholder") }));
+        const component = () => (react_1.default.createElement(core_1.DatePicker, { action: "date", initialDate: "2020-11-11", placeholder: react_1.default.createElement(core_1.Text, { emoji: true }, "just a placeholder") }));
         it("renders DatePicker with Text component placeholder property", () => __awaiter(void 0, void 0, void 0, function* () {
             const blocks = yield core_1.render(react_1.default.createElement(component));
             expect(blocks).toMatchSnapshot();
         }));
     });
     describe("DatePicker with confirm property", () => {
-        const component = () => (react_1.default.createElement(core_1.DatePicker, { onSelect: () => null, action: "date", initialDate: "2020-11-11", placeholder: react_1.default.createElement(core_1.Text, { emoji: true }, "just a placeholder"), confirm: react_1.default.createElement(core_1.Confirm, { title: "Confirm me?", confirm: "Yes, I confirm!", deny: "No, go away!" }, "Do you confirm me?") }));
+        const component = () => (react_1.default.createElement(core_1.DatePicker, { action: "date", initialDate: "2020-11-11", placeholder: react_1.default.createElement(core_1.Text, { emoji: true }, "just a placeholder"), confirm: react_1.default.createElement(core_1.Confirm, { title: "Confirm me?", confirm: "Yes, I confirm!", deny: "No, go away!" }, "Do you confirm me?") }));
         it("renders DatePicker with confirm property", () => __awaiter(void 0, void 0, void 0, function* () {
             const blocks = yield core_1.render(react_1.default.createElement(component));
             expect(blocks).toMatchSnapshot();
@@ -781,42 +781,11 @@ describe("Channel Select Menu", () => {
 describe("External Select Menu", () => {
     describe("Default External Select Menu", () => {
         const onSearchOptions = jest.fn();
-        const component = () => (react_1.default.createElement(core_1.SelectMenu, { type: "external", minQueryLength: 100, onSearchOptions: (event) => {
-                onSearchOptions(event);
-                return [
-                    react_1.default.createElement(core_1.OptionGroup, { key: "1", label: "A group" },
-                        react_1.default.createElement(core_1.Option, { value: "option-1" }, "This was loaded asynchronously")),
-                ];
-            }, action: "select", placeholder: "a placeholder" }));
+        const component = () => (react_1.default.createElement(core_1.SelectMenu, { type: "external", minQueryLength: 100, action: "select", placeholder: "a placeholder" }));
         it("renders a default External Select Menu", () => __awaiter(void 0, void 0, void 0, function* () {
             const blocks = yield core_1.render(react_1.default.createElement(component));
             expect(blocks).toMatchSnapshot();
         }));
-        describe("When fetching onSearchOptions", () => {
-            it("fetches the correct onSearchOptions function", () => __awaiter(void 0, void 0, void 0, function* () {
-                const user = {
-                    username: "johnsmith",
-                    name: "john smith",
-                    id: "u123",
-                    team_id: "t123",
-                };
-                const onSearchOptionsFn = yield core_1.getOnSearchOptions(component(), {
-                    value: "select",
-                    event: {
-                        user,
-                    },
-                });
-                yield onSearchOptionsFn({
-                    user,
-                    query: "a query",
-                });
-                expect(onSearchOptions).toBeCalled();
-                expect(onSearchOptions).toBeCalledWith({
-                    user,
-                    query: "a query",
-                });
-            }));
-        });
     });
 });
 describe("Multi Static Select Menu", () => {
@@ -892,43 +861,11 @@ describe("Multi Static Select Menu", () => {
 });
 describe("Multi External Select Menu", () => {
     describe("Default Multi External Select Menu", () => {
-        const onSearchOptions = jest.fn();
-        const component = () => (react_1.default.createElement(core_1.MultiSelectMenu, { type: "external", minQueryLength: 100, onSearchOptions: (event) => {
-                onSearchOptions(event);
-                return [
-                    react_1.default.createElement(core_1.OptionGroup, { key: "1", label: "A group" },
-                        react_1.default.createElement(core_1.Option, { value: "option-1" }, "This was loaded asynchronously")),
-                ];
-            }, action: "select", placeholder: "a placeholder" }));
+        const component = () => (react_1.default.createElement(core_1.MultiSelectMenu, { type: "external", minQueryLength: 100, action: "select", placeholder: "a placeholder" }));
         it("renders a default Multi External Select Menu", () => __awaiter(void 0, void 0, void 0, function* () {
             const blocks = yield core_1.render(react_1.default.createElement(component));
             expect(blocks).toMatchSnapshot();
         }));
-        describe("When fetching onSearchOptions", () => {
-            it("fetches the correct onSearchOptions function", () => __awaiter(void 0, void 0, void 0, function* () {
-                const user = {
-                    username: "johnsmith",
-                    name: "john smith",
-                    id: "u123",
-                    team_id: "t123",
-                };
-                const onSearchOptionsFn = yield core_1.getOnSearchOptions(component(), {
-                    value: "select",
-                    event: {
-                        user,
-                    },
-                });
-                yield onSearchOptionsFn({
-                    user,
-                    query: "a query",
-                });
-                expect(onSearchOptions).toBeCalled();
-                expect(onSearchOptions).toBeCalledWith({
-                    user,
-                    query: "a query",
-                });
-            }));
-        });
     });
 });
 describe("Multi User Select Menu", () => {

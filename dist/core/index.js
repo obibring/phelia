@@ -7,4 +7,3 @@ const phelia_1 = require("./phelia");
 exports.default = phelia_1.Phelia;
 __export(require("./components"));
 __export(require("./reconciler"));
-//# sourceMappingURL=index.js.map

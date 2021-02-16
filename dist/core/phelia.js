@@ -654,4 +654,3 @@ class Phelia {
 }
 exports.Phelia = Phelia;
 Phelia.Storage = new Map();
-//# sourceMappingURL=phelia.js.map

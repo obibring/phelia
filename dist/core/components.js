@@ -28,14 +28,7 @@ exports.Text.defaultProps = {
  * Works with block types: Section, Actions
  */
 exports.Button = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "button", toSlackElement: (props, reconcile, promises) => {
-        const instance = {
-            type: "button",
-            action_id: props.action,
-            style: props.style,
-            url: props.url,
-            value: props.value,
-            text: { type: "plain_text", text: "", emoji: props.emoji }
-        };
+        const instance = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ type: "button" }, (props.action && { action_id: props.action })), (props.style && { style: props.style })), (props.url && { url: props.url })), (props.value && { value: props.value })), { text: { type: "plain_text", text: "", emoji: props.emoji } });
         const [confirm, confirmPromises] = reconcile(props.confirm);
         instance.confirm = confirm;
         promises.push(...confirmPromises);
@@ -371,8 +364,7 @@ exports.OptionGroup = (props) => (react_1.default.createElement("component", Obj
 exports.SelectMenu = (props) => (react_1.default.createElement("component", Object.assign({}, props, { componentType: "select-menu", toSlackElement: (props, reconcile, promises) => {
         const instance = {
             type: props.type + "_select",
-            action_id: props.action,
-            onSearchOptions: props.onSearchOptions
+            action_id: props.action
         };
         const [confirm, confirmPromises] = reconcile(props.confirm);
         const [placeholder, placeholderPromises] = reconcile(props.placeholder);
@@ -454,8 +446,7 @@ exports.MultiSelectMenu = (props) => (react_1.default.createElement("component",
         const instance = {
             type: "multi_" + props.type + "_select",
             action_id: props.action,
-            max_selected_items: props.maxSelectedItems,
-            onSearchOptions: props.onSearchOptions
+            max_selected_items: props.maxSelectedItems
         };
         const [confirm, confirmPromises] = reconcile(props.confirm);
         const [placeholder, placeholderPromises] = reconcile(props.placeholder);
@@ -520,4 +511,3 @@ exports.Home = (props) => (react_1.default.createElement("component", Object.ass
         };
         return instance;
     } })));
-//# sourceMappingURL=components.js.map

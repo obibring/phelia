@@ -1024,7 +1024,6 @@ interface ExternalSelectMenu extends SelectMenuBase {
    */
   initialOption?: ReactElement;
   /** Called when a user is search the menu options. Should return result options */
-  onSearchOptions: SearchOptions;
   /**
    * 	When the typeahead field is used, a request will be sent on every character
    * change. If you prefer fewer requests or more fully ideated queries, use the
@@ -1097,8 +1096,7 @@ export const SelectMenu = (props: SelectMenuProps) => (
     toSlackElement={(props, reconcile, promises) => {
       const instance: any = {
         type: props.type + "_select",
-        action_id: props.action,
-        onSearchOptions: props.onSearchOptions
+        action_id: props.action
       };
 
       const [confirm, confirmPromises] = reconcile(props.confirm);
@@ -1210,8 +1208,6 @@ interface MultiSelectMenuBase {
    * before the multi-select choices are submitted.
    */
   confirm?: ReactElement;
-  /** Callback for when a menu item is selected */
-  onSelect?: (event: MultiSelectOptionEvent) => void | Promise<void>;
   /**
    * Specifies the maximum number of items that can be selected in the menu.
    * Minimum number is 1.
@@ -1252,8 +1248,6 @@ interface MultiExternalSelectMenu extends MultiSelectMenuBase {
    * selected when the menu initially loads.
    */
   initialOptions?: ReactElement[];
-  /** Called when a user is search the select options. Should return result options */
-  onSearchOptions: SearchOptions;
   /**
    * When the typeahead field is used, a request will be sent on every character change.
    * If you prefer fewer requests or more fully ideated queries, use the min_query_length
@@ -1309,8 +1303,7 @@ export const MultiSelectMenu = (props: MultiSelectMenuProps) => (
       const instance: any = {
         type: "multi_" + props.type + "_select",
         action_id: props.action,
-        max_selected_items: props.maxSelectedItems,
-        onSearchOptions: props.onSearchOptions
+        max_selected_items: props.maxSelectedItems
       };
 
       const [confirm, confirmPromises] = reconcile(props.confirm);
